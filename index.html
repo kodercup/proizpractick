@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Жилье: аренда и покупка</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        color: #333;
+        line-height: 1.6;
+        background-color: #f8f9fa;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 18px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 20px;
+        align-items: center;
+      }
+
+      nav a, .nav-btn {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 16px;
+        padding: 10px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .cart-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 16px;
+        border-radius: 6px;
+      }
+
+      .user-name {
+        color: white;
+        font-weight: 600;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #3498db, #2980b9, #2c3e50);
+        color: white;
+        text-align: center;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+        background-size: cover;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+      }
+
+      .btn {
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        background: linear-gradient(135deg, #27ae60, #219653);
+      }
+
+      .btn-rent {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      .btn-rent:hover {
+        background: linear-gradient(135deg, #2980b9, #21618c);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+      }
+
+      .btn-buy {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      }
+
+      .btn-buy:hover {
+        background: linear-gradient(135deg, #c0392b, #a93226);
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+      }
+
+      .btn-add {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 24px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 15px;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
+
+      .btn-add:hover {
+        background: linear-gradient(135deg, #2980b9, #21618c);
+        transform: translateY(-2px);
+      }
+
+      /* Properties */
+      .properties {
+        padding: 60px 0;
+        background-color: #f8f9fa;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .section-title h2 {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        color: #2c3e50;
+        font-weight: 700;
+      }
+
+      .section-title p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+      }
+
+      .properties-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+      }
+
+      .property-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .property-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .property-img-container {
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+        position: relative;
+      }
+
+      .property-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .property-card:hover .property-img {
+        transform: scale(1.05);
+      }
+
+      .property-type {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(44, 62, 80, 0.9);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .property-info {
+        padding: 20px;
+      }
+
+      .property-price-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f1f2f6;
+      }
+
+      .rent-price {
+        color: #3498db;
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      .buy-price {
+        color: #e74c3c;
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      .property-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 1.2rem;
+        color: #2c3e50;
+      }
+
+      .property-location {
+        color: #7f8c8d;
+        margin-bottom: 15px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .property-features {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        padding-top: 20px;
+        border-top: 1px solid #f1f2f6;
+        font-size: 14px;
+      }
+
+      .feature {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #2c3e50;
+      }
+
+      .rent-duration-selector {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .rent-duration-selector.active {
+        display: block;
+      }
+
+      .duration-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 15px;
+      }
+
+      .duration-btn {
+        padding: 12px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      .duration-btn:hover {
+        border-color: #3498db;
+        background-color: #f0f7ff;
+      }
+
+      .duration-btn.selected {
+        border-color: #3498db;
+        background-color: #e3f2fd;
+        color: #3498db;
+      }
+
+      .total-price {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #e0e0e0;
+      }
+
+      .buttons-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        gap: 10px;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        backdrop-filter: blur(5px);
+        animation: modalFadeIn 0.3s ease;
+      }
+
+      @keyframes modalFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        animation: modalSlideIn 0.3s ease;
+      }
+
+      @keyframes modalSlideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #7f8c8d;
+        transition: color 0.2s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      .close-modal:hover {
+        color: #e74c3c;
+        background-color: #f8f9fa;
+      }
+
+      .modal h2 {
+        margin-bottom: 25px;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 1.8rem;
+      }
+
+      .modal form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .form-control {
+        padding: 14px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        width: 100%;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      .modal-links {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .modal-links a {
+        color: #3498db;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      .modal-links a:hover {
+        color: #2980b9;
+        text-decoration: underline;
+      }
+
+      /* Cart */
+      .cart-modal {
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .cart-items {
+        margin: 20px 0;
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+        transition: background-color 0.2s ease;
+      }
+
+      .cart-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .cart-item-img {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-right: 15px;
+        background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+      }
+
+      .cart-item-info {
+        flex-grow: 1;
+      }
+
+      .cart-item-title {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 4px;
+        color: #2c3e50;
+      }
+
+      .cart-item-type {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background-color: #f1f2f6;
+      }
+
+      .cart-item-duration {
+        font-size: 13px;
+        color: #7f8c8d;
+        margin-bottom: 4px;
+      }
+
+      .cart-item-price {
+        color: #e74c3c;
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      .remove-from-cart {
+        background: none;
+        border: none;
+        color: #e74c3c;
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 5px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+      }
+
+      .remove-from-cart:hover {
+        background-color: #ffebee;
+      }
+
+      .cart-total {
+        text-align: right;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 3px solid #eee;
+        color: #2c3e50;
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        text-align: center;
+        padding: 40px 0;
+        margin-top: 60px;
+      }
+
+      footer p {
+        opacity: 0.8;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .properties-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        nav ul {
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .header-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .properties-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .duration-options {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          padding: 60px 0;
+        }
+
+        .hero h1 {
+          font-size: 1.6rem;
+        }
+
+        .section-title h2 {
+          font-size: 1.8rem;
+        }
+
+        .modal-content {
+          padding: 20px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+      <div class="container header-container">
+        <div class="logo">🏠 Жилье для всех</div>
+        <nav>
+          <ul>
+            <li><a href="#" class="nav-home">Главная</a></li>
+            <li>
+              <button class="nav-btn cart-btn" id="cartBtn">
+                🛒 Корзина <span class="cart-count" id="cartCount">0</span>
+              </button>
+            </li>
+            <li class="user-info" id="userInfo" style="display: none">
+              <span class="user-name" id="userName"></span>
+              <button class="nav-btn" id="logoutBtn">Выйти</button>
+            </li>
+            <li class="auth-buttons" id="authButtons">
+              <button class="nav-btn" id="loginBtn">Войти</button>
+              <button class="nav-btn" id="registerBtn">Регистрация</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>Найди свой идеальный дом</h1>
+        <p>Арендуй или купи - просто выбери подходящий вариант!</p>
+        <!-- Кнопки удалены отсюда -->
+      </div>
+    </section>
+
+    <!-- Properties -->
+    <section class="properties" id="properties">
+      <div class="container">
+        <div class="section-title">
+          <h2>Доступные варианты</h2>
+          <p>Выбирай и добавляй в корзину</p>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+          <!-- Properties loaded by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>© 2024 Жилье для всех. Все права защищены.</p>
+      </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeLoginModal">×</button>
+        <h2>Вход</h2>
+        <form id="loginForm">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Имя пользователя"
+            required
+            id="loginUsername"
+          />
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Пароль"
+            required
+            id="loginPassword"
+          />
+          <button type="submit" class="btn">Войти</button>
+        </form>
+        <div class="modal-links">
+          <a href="#" id="switchToRegister">Нет аккаунта? Зарегистрироваться</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeRegisterModal">×</button>
+        <h2>Регистрация</h2>
+        <form id="registerForm">
+          <input type="text" class="form-control" placeholder="Имя пользователя" required id="registerUsername" />
+          <input type="password" class="form-control" placeholder="Пароль" required id="registerPassword" />
+          <input type="password" class="form-control" placeholder="Повторите пароль" required id="registerPasswordConfirm" />
+          <button type="submit" class="btn">Зарегистрироваться</button>
+        </form>
+        <div class="modal-links">
+          <a href="#" id="switchToLogin">Уже есть аккаунт? Войти</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+      <div class="modal-content cart-modal">
+        <button class="close-modal" id="closeCartModal">×</button>
+        <h2>🛒 Мои выборы</h2>
+        <div class="cart-items" id="cartItems">
+          <!-- Cart items loaded by JavaScript -->
+        </div>
+        <div class="cart-total">Итого: <span id="cartTotal">0 ₽</span></div>
+        <button
+          class="btn"
+          id="checkoutBtn"
+          style="width: 100%; margin-top: 20px; background: linear-gradient(135deg, #e74c3c, #c0392b);"
+        >
+          Оформить заявку
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Property data with both rent and buy prices
+      const properties = [
+        {
+          id: 1,
+          title: "Уютная квартира, 45 м²",
+          location: "Москва, центр",
+          rentPrice: "45 000 ₽/мес",
+          rentPriceNum: 45000,
+          buyPrice: "8 500 000 ₽",
+          buyPriceNum: 8500000,
+          type: "apartment",
+          image: "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 1,
+          area: 45,
+        },
+        {
+          id: 2,
+          title: "Просторная квартира, 85 м²",
+          location: "Москва, СВАО",
+          rentPrice: "75 000 ₽/мес",
+          rentPriceNum: 75000,
+          buyPrice: "15 000 000 ₽",
+          buyPriceNum: 15000000,
+          type: "apartment",
+          image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 3,
+          area: 85,
+        },
+        {
+          id: 3,
+          title: "Семейный дом, 140 м²",
+          location: "МО, Красногорск",
+          rentPrice: "120 000 ₽/мес",
+          rentPriceNum: 120000,
+          buyPrice: "18 000 000 ₽",
+          buyPriceNum: 18000000,
+          type: "house",
+          image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 4,
+          area: 140,
+        },
+        {
+          id: 4,
+          title: "Квартира с ремонтом, 60 м²",
+          location: "Санкт-Петербург",
+          rentPrice: "55 000 ₽/мес",
+          rentPriceNum: 55000,
+          buyPrice: "10 500 000 ₽",
+          buyPriceNum: 10500000,
+          type: "apartment",
+          image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 2,
+          area: 60,
+        },
+        {
+          id: 5,
+          title: "Загородный коттедж, 180 м²",
+          location: "Карелия",
+          rentPrice: "90 000 ₽/мес",
+          rentPriceNum: 90000,
+          buyPrice: "14 000 000 ₽",
+          buyPriceNum: 14000000,
+          type: "house",
+          image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 5,
+          area: 180,
+        },
+        {
+          id: 6,
+          title: "Студия, 35 м²",
+          location: "Москва, ЮАО",
+          rentPrice: "35 000 ₽/мес",
+          rentPriceNum: 35000,
+          buyPrice: "6 200 000 ₽",
+          buyPriceNum: 6200000,
+          type: "apartment",
+          image: "https://images.unsplash.com/photo-1531835551805-16d864c8d311?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+          bedrooms: 1,
+          area: 35,
+        },
+      ];
+
+      // DOM Elements
+      const propertiesGrid = document.getElementById("propertiesGrid");
+      const cartBtn = document.getElementById("cartBtn");
+      const cartCount = document.getElementById("cartCount");
+      const cartItems = document.getElementById("cartItems");
+      const cartTotal = document.getElementById("cartTotal");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      const userInfo = document.getElementById("userInfo");
+      const userName = document.getElementById("userName");
+      const authButtons = document.getElementById("authButtons");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // Modal elements
+      const loginModal = document.getElementById("loginModal");
+      const registerModal = document.getElementById("registerModal");
+      const cartModal = document.getElementById("cartModal");
+      const closeLoginModal = document.getElementById("closeLoginModal");
+      const closeRegisterModal = document.getElementById("closeRegisterModal");
+      const closeCartModal = document.getElementById("closeCartModal");
+      const switchToRegister = document.getElementById("switchToRegister");
+      const switchToLogin = document.getElementById("switchToLogin");
+
+      // Forms
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+
+      // User state - загружаем из Local Storage
+      let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      // Initialize
+      updateCartCount();
+      renderProperties();
+      updateAuthUI();
+
+      // Modal controls
+      document.getElementById("loginBtn").addEventListener("click", () => {
+        loginModal.style.display = "flex";
+        document.getElementById('loginUsername').focus();
+      });
+
+      document.getElementById("registerBtn").addEventListener("click", () => {
+        registerModal.style.display = "flex";
+        document.getElementById('registerUsername').focus();
+      });
+
+      cartBtn.addEventListener("click", () => {
+        cartModal.style.display = "flex";
+        renderCart();
+      });
+
+      closeLoginModal.addEventListener("click", () => {
+        loginModal.style.display = "none";
+      });
+
+      closeRegisterModal.addEventListener("click", () => {
+        registerModal.style.display = "none";
+      });
+
+      closeCartModal.addEventListener("click", () => {
+        cartModal.style.display = "none";
+      });
+
+      switchToRegister.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginModal.style.display = "none";
+        registerModal.style.display = "flex";
+      });
+
+      switchToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        registerModal.style.display = "none";
+        loginModal.style.display = "flex";
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        logoutUser();
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", (e) => {
+        if (e.target === loginModal) loginModal.style.display = "none";
+        if (e.target === registerModal) registerModal.style.display = "none";
+        if (e.target === cartModal) cartModal.style.display = "none";
+      });
+
+      // Login form
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (username && password) {
+          // Получаем пользователей из Local Storage
+          let users = JSON.parse(localStorage.getItem("users")) || [];
+
+          // Ищем пользователя
+          const user = users.find(
+            (u) => u.name === username && u.password === password
+          );
+
+          if (user) {
+            currentUser = user;
+            // Сохраняем в Local Storage
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+            showNotification(`Добро пожаловать, ${currentUser.name}!`);
+            loginModal.style.display = "none";
+            loginForm.reset();
+
+            // Обновляем интерфейс
+            updateAuthUI();
+          } else {
+            showNotification("Неверное имя пользователя или пароль", "error");
+          }
+        }
+      });
+
+      // Register form
+      registerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById('registerUsername').value;
+        const password = document.getElementById('registerPassword').value;
+        const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+        if (password !== passwordConfirm) {
+          showNotification("Пароли не совпадают", "error");
+          return;
+        }
+
+        if (username && password) {
+          // Получаем пользователей из Local Storage
+          let users = JSON.parse(localStorage.getItem("users")) || [];
+
+          // Проверяем, существует ли пользователь
+          if (users.some((user) => user.name === username)) {
+            showNotification("Пользователь с таким именем уже зарегистрирован", "error");
+            return;
+          }
+
+          // Создаем нового пользователя
+          const newUser = {
+            id: Date.now(),
+            name: username,
+            password: password,
+            createdAt: new Date().toISOString(),
+          };
+
+          // Добавляем пользователя в список
+          users.push(newUser);
+          localStorage.setItem("users", JSON.stringify(users));
+
+          // Устанавливаем текущего пользователя
+          currentUser = newUser;
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+          showNotification(`Регистрация успешна! Добро пожаловать, ${username}!`);
+          registerModal.style.display = "none";
+          registerForm.reset();
+
+          // Обновляем интерфейс
+          updateAuthUI();
+        }
+      });
+
+      // Notification function
+      function showNotification(message, type = "success") {
+        // Remove existing notification
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+          existingNotification.remove();
+        }
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 15px 25px;
+          background: ${type === 'error' ? '#e74c3c' : '#2ecc71'};
+          color: white;
+          border-radius: 8px;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          z-index: 3000;
+          animation: slideIn 0.3s ease;
+          font-weight: 600;
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Add animation styles
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Logout function
+      function logoutUser() {
+        currentUser = null;
+        localStorage.removeItem("currentUser");
+        updateAuthUI();
+        showNotification("Вы вышли из системы");
+      }
+
+      // Update authentication UI
+      function updateAuthUI() {
+        if (currentUser) {
+          // Показываем информацию о пользователе
+          userName.textContent = currentUser.name;
+          userInfo.style.display = "flex";
+          authButtons.style.display = "none";
+        } else {
+          // Показываем кнопки входа/регистрации
+          userInfo.style.display = "none";
+          authButtons.style.display = "block";
+        }
+      }
+
+      // Checkout
+      checkoutBtn.addEventListener("click", () => {
+        if (cart.length === 0) {
+          showNotification("Корзина пуста!", "error");
+          return;
+        }
+
+        let message = "Заявка оформлена!\n\n";
+        let total = 0;
+        
+        cart.forEach((item) => {
+          message += `✓ ${item.title}\n`;
+          if (item.transaction === "rent") {
+            message += `  Тип: Аренда\n`;
+            message += `  Срок: ${item.duration} мес.\n`;
+          } else {
+            message += `  Тип: Покупка\n`;
+          }
+          message += `  Сумма: ${item.totalPrice.toLocaleString()} ₽\n\n`;
+          total += item.totalPrice;
+        });
+
+        message += `Общая сумма: ${total.toLocaleString()} ₽\n\n`;
+        message += "С вами свяжутся для уточнения деталей";
+
+        alert(message);
+        cart = [];
+        updateCart();
+        cartModal.style.display = "none";
+        showNotification("Заявка успешно оформлена!");
+      });
+
+      // Render properties
+      function renderProperties() {
+        propertiesGrid.innerHTML = "";
+
+        properties.forEach((property) => {
+          const propertyCard = document.createElement("div");
+          propertyCard.className = "property-card";
+
+          propertyCard.innerHTML = `
+            <div class="property-img-container">
+              <img src="${property.image}" alt="${property.title}" class="property-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"400\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23ecf0f1\"/><text x=\"300\" y=\"200\" font-family=\"Arial\" font-size=\"30\" text-anchor=\"middle\" fill=\"%23999\">${property.type === 'apartment' ? 'Квартира' : 'Дом'}</text></svg>'">
+              <div class="property-type">${property.type === 'apartment' ? 'Квартира' : 'Дом'}</div>
+            </div>
+            <div class="property-info">
+              <div class="property-price-container">
+                <div class="rent-price">${property.rentPrice}</div>
+                <div class="buy-price">${property.buyPrice}</div>
+              </div>
+              <div class="property-title">${property.title}</div>
+              <div class="property-location">📍 ${property.location}</div>
+              
+              <div class="property-features">
+                <div class="feature">🛏️ ${property.bedrooms} комн.</div>
+                <div class="feature">📐 ${property.area} м²</div>
+              </div>
+              
+              <div class="rent-duration-selector" id="duration-${property.id}">
+                <div style="margin-bottom: 10px; font-weight: 600;">Выбери срок аренды:</div>
+                <div class="duration-options">
+                  <div class="duration-btn" data-months="1">1 месяц</div>
+                  <div class="duration-btn" data-months="3">3 месяца</div>
+                  <div class="duration-btn" data-months="6">6 месяцев</div>
+                </div>
+                <div class="total-price" id="total-${property.id}">
+                  <div style="margin-bottom: 5px;">Итого за <span id="months-${property.id}">1</span> месяц:</div>
+                  <div style="color: #e74c3c; font-size: 1.4rem; font-weight: 700; margin-bottom: 15px;" id="price-${property.id}">${property.rentPriceNum.toLocaleString()} ₽</div>
+                  <button class="btn-add" id="add-to-cart-${property.id}">
+                    Добавить в корзину
+                  </button>
+                </div>
+              </div>
+              
+              <div class="buttons-container" id="buttons-${property.id}">
+                <button class="btn btn-rent rent-btn" data-id="${property.id}">
+                  🏠 Арендовать
+                </button>
+                <button class="btn btn-buy buy-btn" data-id="${property.id}">
+                  💰 Купить
+                </button>
+              </div>
+            </div>
+          `;
+          
+          propertiesGrid.appendChild(propertyCard);
+
+          // Rent button event
+          const rentBtn = propertyCard.querySelector(".rent-btn");
+          const buyBtn = propertyCard.querySelector(".buy-btn");
+          const durationSelector = document.getElementById(`duration-${property.id}`);
+          const monthsElement = document.getElementById(`months-${property.id}`);
+          const priceElement = document.getElementById(`price-${property.id}`);
+          const addToCartBtn = document.getElementById(`add-to-cart-${property.id}`);
+          const buttonsContainer = document.getElementById(`buttons-${property.id}`);
+
+          // Show duration selector when rent button is clicked
+          rentBtn.addEventListener("click", () => {
+            // Проверяем авторизацию
+            if (!currentUser) {
+              showNotification("Пожалуйста, войдите в систему, чтобы арендовать жилье", "error");
+              loginModal.style.display = "flex";
+              return;
+            }
+
+            durationSelector.classList.add("active");
+            buttonsContainer.style.display = "none";
+
+            // Select first duration option by default
+            const firstOption = durationSelector.querySelector(".duration-btn");
+            if (firstOption) {
+              firstOption.classList.add("selected");
+              updatePriceDisplay(property, 1, monthsElement, priceElement);
+            }
+          });
+
+          // Duration selection
+          const durationBtns = durationSelector.querySelectorAll(".duration-btn");
+          durationBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+              // Remove selected class from all buttons
+              durationBtns.forEach((b) => b.classList.remove("selected"));
+              // Add selected class to clicked button
+              btn.classList.add("selected");
+
+              const months = parseInt(btn.getAttribute("data-months"));
+              updatePriceDisplay(property, months, monthsElement, priceElement);
+            });
+          });
+
+          // Add to cart button for rent
+          addToCartBtn.addEventListener("click", () => {
+            const selectedBtn = durationSelector.querySelector(".duration-btn.selected");
+            if (selectedBtn) {
+              const months = parseInt(selectedBtn.getAttribute("data-months"));
+              addToCart(property.id, "rent", months);
+              durationSelector.classList.remove("active");
+              buttonsContainer.style.display = "flex";
+            }
+          });
+
+          // Buy button event
+          buyBtn.addEventListener("click", () => {
+            // Проверяем авторизацию
+            if (!currentUser) {
+              showNotification("Пожалуйста, войдите в систему, чтобы купить жилье", "error");
+              loginModal.style.display = "flex";
+              return;
+            }
+
+            addToCart(property.id, "buy", null);
+          });
+        });
+      }
+
+      function updatePriceDisplay(property, months, monthsElement, priceElement) {
+        const total = property.rentPriceNum * months;
+
+        let periodText = "";
+        if (months === 1) periodText = "месяц";
+        else if (months < 5) periodText = "месяца";
+        else periodText = "месяцев";
+
+        monthsElement.textContent = `${months} ${periodText}`;
+        priceElement.textContent = `${total.toLocaleString()} ₽`;
+      }
+
+      // Add to cart
+      function addToCart(id, transaction, months) {
+        const property = properties.find((p) => p.id === id);
+        if (!property) return;
+
+        // Проверяем, не добавлен ли уже этот объект в корзину
+        const existingIndex = cart.findIndex(
+          (item) => item.id === id && item.transaction === transaction
+        );
+
+        if (existingIndex !== -1) {
+          // Обновляем существующий элемент
+          if (transaction === "rent") {
+            cart[existingIndex].duration = months;
+            cart[existingIndex].totalPrice = property.rentPriceNum * months;
+          }
+        } else {
+          // Добавляем новый элемент
+          const cartItem = {
+            id: property.id,
+            title: property.title,
+            location: property.location,
+            image: property.image,
+            transaction: transaction,
+            totalPrice: transaction === "rent" 
+              ? property.rentPriceNum * months 
+              : property.buyPriceNum,
+          };
+
+          if (transaction === "rent") {
+            cartItem.duration = months;
+            cartItem.pricePerMonth = property.rentPriceNum;
+          }
+
+          cart.push(cartItem);
+        }
+
+        updateCart();
+        
+        if (transaction === "rent") {
+          showNotification(`"${property.title}" добавлен на ${months} мес. за ${(property.rentPriceNum * months).toLocaleString()} ₽`);
+        } else {
+          showNotification(`"${property.title}" добавлен за ${property.buyPriceNum.toLocaleString()} ₽`);
+        }
+      }
+
+      // Remove from cart
+      function removeFromCart(id, transaction) {
+        cart = cart.filter((item) => !(item.id === id && item.transaction === transaction));
+        updateCart();
+        renderCart();
+      }
+
+      // Update cart
+      function updateCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+      }
+
+      // Update cart count
+      function updateCartCount() {
+        cartCount.textContent = cart.length;
+      }
+
+      // Render cart
+      function renderCart() {
+        cartItems.innerHTML = "";
+
+        if (cart.length === 0) {
+          cartItems.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;">🛒</div>
+              <p style="color: #7f8c8d; font-size: 1.1rem;">Здесь пока пусто</p>
+            </div>
+          `;
+          cartTotal.textContent = "0 ₽";
+          return;
+        }
+
+        cart.forEach((item, index) => {
+          const cartItem = document.createElement("div");
+          cartItem.className = "cart-item";
+          cartItem.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" class="cart-item-img" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" fill=\"%23ecf0f1\"/></svg>'">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${item.title}</div>
+              <div class="cart-item-type" style="color: ${item.transaction === "rent" ? "#3498db" : "#e74c3c"}; background-color: ${item.transaction === "rent" ? "#e3f2fd" : "#ffebee"}">
+                ${item.transaction === "rent" ? "АРЕНДА" : "ПОКУПКА"}
+              </div>
+              <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 4px;">📍 ${item.location}</div>
+              ${item.transaction === "rent" 
+                ? `<div class="cart-item-duration">⏱️ ${item.duration} мес.</div>` 
+                : ""}
+              <div class="cart-item-price">${item.totalPrice.toLocaleString()} ₽</div>
+            </div>
+            <button class="remove-from-cart" data-index="${index}" title="Удалить">×</button>
+          `;
+          cartItems.appendChild(cartItem);
+        });
+
+        // Add event listeners to remove buttons
+        document.querySelectorAll(".remove-from-cart").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            const index = parseInt(e.target.getAttribute("data-index"));
+            const item = cart[index];
+            removeFromCart(item.id, item.transaction);
+          });
+        });
+
+        // Update total
+        cartTotal.textContent = `${calculateCartTotal().toLocaleString()} ₽`;
+      }
+
+      // Calculate cart total
+      function calculateCartTotal() {
+        return cart.reduce((total, item) => total + item.totalPrice, 0);
+      }
+
+      // Initialize cart on page load
+      renderCart();
+    </script>
+</body>
+</html>
