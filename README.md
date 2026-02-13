@@ -1,9 +1,10 @@
 ## Название 
 
 <br>
-Мой
+Мой логотип 
 <br>
-![картинка](https://github.com/user-attachments/assets/adf99f3e-957c-4369-968a-fbdd42da5978)
+<img width="1026" height="1280" alt="image" src="https://github.com/user-attachments/assets/f6430aeb-5051-4fdd-b420-0b3927e1eac4" />
+
 
 <br>
 
