@@ -3,7 +3,7 @@
 <br>
 Мой логотип 
 <br>
-<img width="1026" height="1280" alt="image" src="https://github.com/user-attachments/assets/f6430aeb-5051-4fdd-b420-0b3927e1eac4" />
+<img width="700" height="700" alt="image" src="https://github.com/user-attachments/assets/f6430aeb-5051-4fdd-b420-0b3927e1eac4" />
 
 
 <br>
